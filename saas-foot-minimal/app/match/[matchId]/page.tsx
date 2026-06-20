@@ -18,7 +18,7 @@ export default function MatchDashboard() {
     // Vérification basique de connexion (adapte selon ton système d'auth plus tard)
     const isConnected = localStorage.getItem("token") !== null; 
 
-    fetch(`https://foot-app-1.onrender.com/api/matches/${matchId}`, {
+    fetch(`https://foot-app-2.onrender.com/api/matches/${matchId}`, {
       headers: {
         "Authorization": isConnected ? `Bearer ${localStorage.getItem("token")}` : ""
       }
