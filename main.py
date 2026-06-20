@@ -446,3 +446,20 @@ if __name__ == "__main__":
     print("Démarrage du backend (FastAPI)...")
     print("Accès à la documentation : https://foot-app-2.onrender.com/docs")
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+@app.get("/api/test-api")
+def test_api_sports():
+    date_du_jour = datetime.now().strftime("%Y-%m-%d")
+    url = "https://v3.football.api-sports.io/fixtures"
+    headers = {"x-apisports-key": api_sports_key}
+    querystring = {"date": date_du_jour}
+    try:
+        response = requests.get(url, headers=headers, params=querystring)
+        # On renvoie tout directement au navigateur !
+        return {
+            "cle_configuree": api_sports_key is not None,
+            "status_code": response.status_code,
+            "reponse_brute": response.json()
+        }
+    except Exception as e:
+        return {"erreur_fatale": str(e)}
