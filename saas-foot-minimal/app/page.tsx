@@ -14,7 +14,7 @@ export default function LandingPage() {
   const [searchError, setSearchError] = useState("");
 
   useEffect(() => {
-    fetch("https://foot-app-2.onrender.com/api/matches/today")
+    fetch("https://foot-app-1.onrender.com/api/matches/today")
       .then((res) => res.json())
       .then((data) => {
         setMatches(data);
