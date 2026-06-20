@@ -185,6 +185,7 @@ def recuperer_cotes_1x2(match_id: int):
         response = requests.get(url, headers=headers, params=querystring)
         response.raise_for_status()
         data = response.json()
+        print(f"REPONSE BRUTE API-SPORTS : {data}")
         if data.get('response'):
             bookmakers = data['response'][0].get('bookmakers', [])
             if bookmakers:
