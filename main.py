@@ -14,7 +14,8 @@ from supabase import create_client, Client
 # ==========================================
 # 1. INITIALISATION DE L'ENVIRONNEMENT & API
 # ==========================================
-load_dotenv(dotenv_path="/Users/martinbrunet-lecomte/Documents/Perso/Documents importants/Foot/.env")
+# On charge le .env automatiquement sans chemin en dur (idéal pour Foot2 et Render)
+load_dotenv()
 
 # --- INITIALISATION SUPABASE ---
 supabase_url = os.getenv("SUPABASE_URL")
@@ -107,7 +108,7 @@ app = FastAPI(
 )
 
 # ==========================================
-# 4. CONFIGURATION DES CORS (Pour Lovable)
+# 4. CONFIGURATION DES CORS
 # ==========================================
 app.add_middleware(
     CORSMiddleware,
@@ -263,6 +264,7 @@ async def get_today_matches():
         data = response.json()
         liste_matchs = []
         for match in data.get('response', []):
+            # On accepte TOUS les statuts (en cours, terminés, etc.) pour éviter les listes vides
             if match['fixture']['status']['short'] in ['NS', 'TBD', '1H', '2H', 'HT', 'FT', 'AET', 'PEN']:
                 heure_formatee = match['fixture']['date'].split('T')[1][:5]
                 url_logo_home = match['teams']['home'].get('logo')
@@ -408,7 +410,7 @@ async def analyze_match(request: MatchRequest):
 
     return MatchResponse(
         match_id=request.match_id,
-        gender="Non défini", # Sera écrasé par le route appelante
+        gender="Non défini", 
         prob_home=int(prob_h * 100),
         prob_draw=int(prob_d * 100),
         prob_away=int(prob_a * 100),
@@ -439,14 +441,7 @@ async def test_cloture(match_id: int, resultat_reel: str):
     except Exception as e:
         return {"error": str(e)}
 
-# ==========================================
-# 8. LANCEMENT DU SERVEUR
-# ==========================================
-if __name__ == "__main__":
-    print("Démarrage du backend (FastAPI)...")
-    print("Accès à la documentation : https://foot-app-2.onrender.com/docs")
-    uvicorn.run(app, host="127.0.0.1", port=8000)
-
+# NOTRE ROUTE DE TEST (Déplacée au bon endroit !)
 @app.get("/api/test-api")
 def test_api_sports():
     date_du_jour = datetime.now().strftime("%Y-%m-%d")
@@ -455,7 +450,6 @@ def test_api_sports():
     querystring = {"date": date_du_jour}
     try:
         response = requests.get(url, headers=headers, params=querystring)
-        # On renvoie tout directement au navigateur !
         return {
             "cle_configuree": api_sports_key is not None,
             "status_code": response.status_code,
@@ -463,3 +457,11 @@ def test_api_sports():
         }
     except Exception as e:
         return {"erreur_fatale": str(e)}
+
+# ==========================================
+# 8. LANCEMENT DU SERVEUR
+# ==========================================
+if __name__ == "__main__":
+    print("Démarrage du backend (FastAPI)...")
+    print("Accès à la documentation : https://foot-app-2.onrender.com/docs")
+    uvicorn.run(app, host="127.0.0.1", port=8000)
