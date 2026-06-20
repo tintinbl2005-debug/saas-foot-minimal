@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Search, Trophy, Calendar, ChevronRight, AlertCircle, Zap } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Navbar } from "../components/Navbar"; // <-- IMPORT DE LA NAVBAR
 
 export default function LandingPage() {
   const router = useRouter();
@@ -46,10 +47,9 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-[#c1ff72] selection:text-black">
-      {/* Navbar simplifiée intégrée */}
-      <nav className="w-full p-4 flex justify-between items-center border-b border-white/10">
-        <div className="font-black text-xl tracking-tighter">PRONO<span className="text-[#c1ff72]">IA</span></div>
-      </nav>
+      
+      {/* NOTRE NOUVELLE NAVBAR */}
+      <Navbar />
 
       <main className="flex flex-col items-center pt-16 px-4 pb-20 mx-auto max-w-7xl">
         <div className="text-center max-w-4xl mb-16 space-y-6">
@@ -62,6 +62,7 @@ export default function LandingPage() {
           </h1>
         </div>
 
+        {/* BLOC DE RECHERCHE */}
         <div className="w-full max-w-4xl relative z-10 mb-24">
           <div className="flex flex-col md:flex-row items-center gap-4 bg-white/5 p-3 rounded-[2.5rem] border border-white/10 backdrop-blur-xl shadow-2xl">
             <div className="relative flex-1 w-full">
@@ -80,6 +81,7 @@ export default function LandingPage() {
           {searchError && <div className="absolute -bottom-14 left-0 w-full flex justify-center"><span className="flex items-center gap-2 text-red-400 text-sm font-medium bg-red-400/10 px-5 py-2.5 rounded-full"><AlertCircle className="h-4 w-4" />{searchError}</span></div>}
         </div>
 
+        {/* MATCHS DU JOUR (Sous la recherche) */}
         <div className="w-full max-w-5xl space-y-8 pb-20">
           <div className="flex items-center gap-3 border-b border-white/10 pb-5">
             <div className="p-2 bg-[#c1ff72]/10 rounded-lg"><Calendar className="h-5 w-5 text-[#c1ff72]" /></div>
